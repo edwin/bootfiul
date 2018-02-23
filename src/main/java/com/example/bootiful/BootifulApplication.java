@@ -32,49 +32,50 @@ import lombok.NoArgsConstructor;
 @SpringBootApplication
 public class BootifulApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(BootifulApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(BootifulApplication.class, args);
+    }
 
-	@Bean
-	ApplicationRunner applicationRunner(CustomerRepository repository) {
-		return args -> Stream.of("Cornelia", "Mia", "Dave", "Onsi")
-				.forEach(x -> repository.save(new Customer(null, x)));
-	}
+    @Bean
+    ApplicationRunner applicationRunner(CustomerRepository repository) {
+        return args -> Stream.of("Cornelia", "Mia", "Dave", "Onsi")
+                .forEach(x -> repository.save(new Customer(null, x)));
+    }
 }
 
 @Configuration
 @EnableWebSecurity
 class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-	@Bean
-	UserDetailsService users() {
-		return new InMemoryUserDetailsManager(
-				Collections.singleton(User.withUsername("rwinch").password("pw").roles("ADMIN").build()));
-	}
+    @Bean
+    UserDetailsService users() {
+        return new InMemoryUserDetailsManager(
+                Collections.singleton(User.withUsername("rwinch").password("pw").roles("ADMIN").build()));
+    }
 }
 
 @Component
 class CustomHealthIndicator implements HealthIndicator {
 
-	@Override
-	public Health health() {
-		return Health.status("I <3 Production!").build();
-	}
+    @Override
+    public Health health() {
+        return Health.status("I <3 Production!").build();
+    }
 }
 
 @RestController
 class CustomerRestController {
-	private final CustomerRepository customerRepository;
 
-	CustomerRestController(CustomerRepository customerRepository) {
-		this.customerRepository = customerRepository;
-	}
+    private final CustomerRepository customerRepository;
 
-	@GetMapping("/customers")
-	Collection<Customer> customers() {
-		return this.customerRepository.findAll();
-	}
+    CustomerRestController(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+    }
+
+    @GetMapping("/customers")
+    Collection<Customer> customers() {
+        return this.customerRepository.findAll();
+    }
 }
 
 interface CustomerRepository extends JpaRepository<Customer, Long> {
@@ -85,8 +86,9 @@ interface CustomerRepository extends JpaRepository<Customer, Long> {
 @NoArgsConstructor
 @Data
 class Customer {
-	@Id
-	@GeneratedValue
-	private Long id;
-	private String name;
+
+    @Id
+    @GeneratedValue
+    private Long id;
+    private String name;
 }
